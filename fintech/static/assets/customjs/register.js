@@ -78,11 +78,11 @@ $(document).ready(function() {
 
         const $btnText = $('#btnbusiness-text');
         const $spinner = $('.spinner-border');
-        const $btnPersonal = $('#btn-business');
+        const $btnBusiness = $('#btn-business');
 
         $btnText.text('Loading...'); // Update the button text
         $spinner.show(); // Show the spinner
-        $btnPersonal.prop('disabled', true).css({
+        $btnBusiness.prop('disabled', true).css({
             'background-color': '#7261f3', 
             'cursor': 'not-allowed'
         }); // Disable the button after click
@@ -101,7 +101,7 @@ $(document).ready(function() {
                 console.log('Registration successful');
                 $btnText.text('Register Now'); // Reset button text
                 $spinner.hide(); // Hide spinner
-                $btnPersonal.prop('disabled', false).css({
+                $btnBusiness.prop('disabled', false).css({
                     'background-color': '', // Reset background color
                     'cursor': '' // Reset cursor
                 });
@@ -120,7 +120,7 @@ $(document).ready(function() {
             error: function(res) {
                 $btnText.text('register now')
                 $spinner.hide()
-                $btnPersonal.prop('disabled', false).css({
+                $btnBusiness.prop('disabled', false).css({
                     'background-color': '',
                     'cursor': ''
                 })
@@ -136,6 +136,7 @@ $(document).ready(function() {
         })
     });
 
+    // login starts here
     $('#loginPersonal-form').on('submit', function(e) {
         e.preventDefault()
 
@@ -165,7 +166,7 @@ $(document).ready(function() {
 
             success: function(res) {
                 console.log('Registration successful');
-                $btnText.text('Register Now'); // Reset button text
+                $btnText.text('Login Now'); // Reset button text
                 $spinner.hide(); // Hide spinner
                 $btnPersonal.prop('disabled', false).css({
                     'background-color': '', // Reset background color
@@ -190,6 +191,82 @@ $(document).ready(function() {
                 $btnText.text('login now')
                 $spinner.hide()
                 $btnPersonal.prop('disabled', false).css({
+                    'background-color': '',
+                    'cursor': ''
+                })
+
+
+                iziToast.error({
+                title: 'Error',
+                message: res.responseJSON.error,
+                position: 'topCenter'
+                });               
+              
+            }
+
+           
+        })
+
+        
+      
+        
+    })
+
+
+    $('#loginBusiness-form').on('submit', function(e) {
+        e.preventDefault()
+
+        const $btnText = $('#btn-text');
+        const $spinner = $('.spinner-border');
+        const $btnBusiness = $('#btn-business');
+
+        $btnText.text('Loading...'); // Update the button text
+        $spinner.show(); // Show the spinner
+        $btnBusiness.prop('disabled', true).css({
+            'background-color': '#7261f3', 
+            'cursor': 'not-allowed'
+        }); // Disable the button after click
+
+        const $entireForm = $(this);
+        const csrfToken = $('input[name= "csrfmiddlewaretoken"]').val();
+
+           
+        $.ajax({
+            type: 'POST',
+            url: '/login',
+            datatype: 'json',
+            data: $entireForm.serialize(),
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
+
+            success: function(res) {
+                console.log('Registration successful');
+                $btnText.text('Login now'); // Reset button text
+                $spinner.hide(); // Hide spinner
+                $btnBusiness.prop('disabled', false).css({
+                    'background-color': '', // Reset background color
+                    'cursor': '' // Reset cursor
+                });
+
+                // Show success message to the user
+                iziToast.success({
+                    title: 'Success',
+                    message: res.success,
+                    position: 'topCenter'
+                });
+
+                setTimeout(function() {
+                    console.log('redirect noww')
+                     window.location.href = '/'; // Corrected syntax
+                    }, 2000);
+            },
+
+            error: function(res) {
+                // console.log(res)
+                $btnText.text('login now')
+                $spinner.hide()
+                $btnBusiness.prop('disabled', false).css({
                     'background-color': '',
                     'cursor': ''
                 })

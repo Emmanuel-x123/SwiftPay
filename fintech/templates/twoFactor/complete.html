@@ -1,0 +1,60 @@
+{% extends "base/main.html" %}
+{% load static %}
+
+{% block title %}
+  Verify Two-Factor Authentication Token
+{% endblock title %}
+
+
+{% block content %}
+<section class="log-reg">
+    <div class="overlay pb-120">
+        <div class="container">
+            <div class="top-head-area">
+                <div class="row d-flex align-items-center">
+                    <div class="col-sm-5 col">
+                        <a class="back-home" href="{% url 'home' %}">
+                            <img src="{% static 'assets/img/left-icon.png' %}" alt="image">
+                            Back To People Bank
+                        </a>
+                    </div>
+                    <div class="col-sm-5 col">
+                        <a href="{% url 'home' %}">
+                            <img src="{% static 'assets/img/logo.png' %}" alt="image" width="150px">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <div class="form-box">
+                        <h5>Verify Two-Factor Authentication</h5>
+                        <p>Enter the code from your Google Authenticator app:</p>
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="single-input d-flex align-items-center">
+                                        <input type="text" name="otp_token" placeholder="Enter 2 Factor Auth">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="btn-area">
+                                <button type="submit" class="cmn-btn">
+                                    <span class="mx-5" id="btn-text">Verify</span>
+                                    <span class="spinner-border" style="width: 2rem; height: 2rem; display: none;" role="status"></span>
+                                </button>
+                            </div>
+                        </form>
+                        <div class="form-bottom">
+                            <div class="forget-pw">
+                                <a href="">Use Backup Token</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

@@ -1,5 +1,7 @@
+import secrets
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import pyotp
 from shortuuid.django_fields import ShortUUIDField
 from django.utils.timezone import now
 from datetime import timedelta
@@ -65,3 +67,26 @@ class OTPCODE(models.Model):
 
     def __str__(self):
         return  self.user.email
+
+class TwoFactorModel(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='twofactor')
+    is_twofactor_enabled = models.BooleanField(default=False)
+    twoFaCode = models.CharField(max_length=200)
+    twoFa_created = models.DateTimeField(blank=True, null=True)
+    twoFaBackUp = models.JSONField(default=list, blank=True)
+    is_email_enabled = models.BooleanField(default=False)
+    email_otp = models.CharField(max_length=200, blank=True, null=True)
+    email_created = models.DateTimeField(blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+    def generate_twofactor_secret(self):
+        if not self.is_twofactor_enabled:
+             self.twoFaCode = pyotp.random_base32()
+             self.save()
+
+
+    def generate_twofactor_backup(self):
+        self.twoFaBackUp = [secrets.token_hex(4) for _ in range(9)] 
+        self.save()
